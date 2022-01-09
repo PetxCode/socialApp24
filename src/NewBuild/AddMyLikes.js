@@ -5,10 +5,23 @@ import styled from "styled-components";
 import { AuthContext } from "./AuthProvider";
 import { app } from "../base";
 import ShowImage from "./ShowImage";
+import ShowDetails from "./ShowDetails";
+import NamedComp from "./NamedComp";
 
-const AddMyLikes = ({ icon, like, you, myID, total, view, image, x }) => {
+const AddMyLikes = ({
+  named,
+  icon,
+  like,
+  you,
+  myID,
+  total,
+  view,
+  image,
+  x,
+}) => {
   const { currentUser } = useContext(AuthContext);
   const [likeData, setLikeData] = useState([]);
+
   const getPost = app
     .firestore()
     .collection("post")
@@ -50,7 +63,7 @@ const AddMyLikes = ({ icon, like, you, myID, total, view, image, x }) => {
         {you ? (
           <div>
             {likeData.find((el) => el.id === currentUser.uid) ? (
-              <div> You and</div>
+              <div> You and </div>
             ) : null}
           </div>
         ) : null}
@@ -60,9 +73,8 @@ const AddMyLikes = ({ icon, like, you, myID, total, view, image, x }) => {
           <div>
             {likeData.find((el) => el.id === currentUser.uid) ? (
               <div style={{ marginLeft: "5px" }}>Others, love this post</div>
-            ) : (
-              <div>No body has like this post, yet!</div>
-            )}
+            ) : null}
+            {/* <div>No body has like this post, yet!</div> */}
           </div>
         ) : null}
       </div>
@@ -89,8 +101,41 @@ const AddMyLikes = ({ icon, like, you, myID, total, view, image, x }) => {
       <div>
         {total ? (
           <div style={{ marginLeft: "8px" }}>
-            {likeData.length - parseInt(x) === -1 ? null : (
-              <div>{likeData.length - 1} </div>
+            {likeData.find((el) => el.id === currentUser.uid) ? (
+              <div>
+                {likeData.length - parseInt(x) === 0 ? (
+                  <div>hay</div>
+                ) : (
+                  <div>{likeData.length - 1} </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                {likeData.length - parseInt(x) === -1 ? null : (
+                  <div>{likeData.length} </div>
+                )}
+              </div>
+            )}
+          </div>
+        ) : null}
+      </div>
+      <div>
+        {named ? (
+          <div style={{ marginLeft: "8px" }}>
+            {likeData.find((el) => el.id === currentUser.uid) ? (
+              <div>
+                <div>
+                  {likeData.map(({ likedBy, id }) => (
+                    <NamedComp name likedBy={likedBy} />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div>
+                {likeData.length - parseInt(x) === -1 ? null : (
+                  <div>{likeData.length} </div>
+                )}
+              </div>
             )}
           </div>
         ) : null}

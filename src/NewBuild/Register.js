@@ -76,7 +76,7 @@ const Register = () => {
     }
     reset();
 
-    navigate.push("/");
+    navigate("/");
   });
 
   const signUpWithPops = async () => {

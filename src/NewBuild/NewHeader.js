@@ -29,7 +29,7 @@ const NewHeader = () => {
   React.useEffect(() => {
     readData();
     console.log(userData);
-  }, [userData]);
+  }, []);
 
   return (
     <Container>
@@ -38,6 +38,9 @@ const NewHeader = () => {
           <Logo src={logo} />
         </Link>
         <div>welcome back {userData?.userName}</div>
+
+        <Nav to="/memory">My Diary Book</Nav>
+
         <Navigation />
         {currentUser ? (
           <Holder>
@@ -94,8 +97,18 @@ const AvatarText = styled.div`
   }
 `;
 
-const Nav = styled.div`
-  margin: 0 10;
+const Nav = styled(Link)`
+  margin: 0 40px;
+  padding: 15px 30px;
+  border-radius: 3px;
+  transition: all 350ms;
+  text-decoration: none;
+  color: white;
+
+  :hover {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.6);
+  }
 `;
 
 const Holder = styled.div`

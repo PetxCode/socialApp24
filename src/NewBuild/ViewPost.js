@@ -9,19 +9,16 @@ import { AuthContext } from "./AuthProvider";
 import Likes from "./Likes";
 import ShowDetails from "./ShowDetails";
 import AddMyLikes from "./AddMyLikes";
+import CommentPost from "./CommentPost";
+import ViewComments from "./ViewComments";
 
 const ViewPost = () => {
   const { currentUser } = useContext(AuthContext);
   const [postData, setPostData] = useState([]);
 
-  const getPost = app.firestore().collection("post");
+  // const [show, setShow] = useState(false)
 
-  // const getlike = app
-  //   .firestore()
-  //   .collection("post")
-  //   .doc(myID)
-  //   .collection("like");
-  // const [likeData, setLikeData] = useState([]);
+  const getPost = app.firestore().collection("post");
 
   const gettingPost = async () => {
     await getPost.orderBy("createdAt", "desc").onSnapshot((snap) => {
@@ -33,29 +30,24 @@ const ViewPost = () => {
     });
   };
 
-  // const getLikes = async () => {
-  //   await getlike.onSnapshot((snapshot) => {
-  //     const r = [];
-  //     snapshot.forEach((doc) => {
-  //       r.push({ ...doc.data(), id: doc.id });
-  //     });
-  //     setLikeData(r);
-  //   });
-  // };
-
   useEffect(() => {
     gettingPost();
-    // getLikes();
   }, []);
 
   return (
     <Container>
       <Wrapper>
-        {postData?.map(({ id, avatar, createdBy, post, createdAt }) => (
+        {postData?.map(({ toogle, id, avatar, createdBy, post, createdAt }) => (
           <Card key={id}>
             <TopBar>
               <Datail>
-                <ShowDetails myID={createdBy} time={createdAt} />
+                <ShowDetails
+                  myID={createdBy}
+                  time={createdAt}
+                  date
+                  image
+                  name
+                />
               </Datail>
 
               <Icon>
@@ -72,17 +64,23 @@ const ViewPost = () => {
               <Image src={avatar} />
             ) : null}
             <Holder>
-              <Icons>
-                {/* <FavoriteIcon /> */}
-                <AddMyLikes myID={id} icon />
-                {/* <span>You and </span> */}
-                <AddMyLikes myID={id} you />
-                <AddMyLikes myID={id} total x="1" />
-                <AddMyLikes myID={id} like />
+              <Hold>
+                <Icons>
+                  {" "}
+                  <FavoriteIcon />
+                  <AddMyLikes myID={id} you />
+                  <AddMyLikes myID={id} total x="1" />
+                  <AddMyLikes myID={id} like />
+                  {/* <AddMyLikes myID={id} image /> */}
+                </Icons>
+                <PosHold>
+                  <AddMyLikes myID={id} named />
+                </PosHold>
+              </Hold>
 
-                <AddMyLikes myID={id} image />
-              </Icons>
-              <Comments>comment</Comments>
+              <View>
+                <ViewComments id={id} count />
+              </View>
             </Holder>
             <NewHolder>
               <div>
@@ -90,9 +88,22 @@ const ViewPost = () => {
                   <AddMyLikes myID={id} view />
                 </div>
               </div>
-
-              <Comment onClick={"likePost"}>comment</Comment>
+              <Comment
+                onClick={async () => {
+                  await getPost.doc(id).update({
+                    toogle: !toogle,
+                  });
+                  console.log("I am Clicked: ", toogle);
+                }}
+              >
+                comment
+              </Comment>
             </NewHolder>
+            {toogle ? (
+              <CommentPost myID={id} myForm viewOne />
+            ) : (
+              <CommentPost myID={id} viewAll myForm />
+            )}
           </Card>
         ))}
       </Wrapper>
@@ -102,6 +113,41 @@ const ViewPost = () => {
 
 export default ViewPost;
 
+const View = styled.div`
+  display: flex;
+  align-items: center;
+`;
+const Space = styled.div`
+  border-bottom: 2px solid red;
+  width: 200px;
+`;
+const PosHold = styled.div`
+  display: flex;
+  position: absolute;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 20px 30px;
+  border-radius: 3px;
+  opacity: 0;
+  bottom: 0;
+
+  :hover {
+    display: flex;
+    opacity: 1;
+  }
+
+  span {
+    display: flex;
+    :hover {
+      display: flex;
+    }
+  }
+`;
+
+const Hold = styled.div`
+  position: relative;
+`;
+
 const Rotate = styled.div`
   transform: rotate(180deg);
   /* margin-bottom: 10px; */
@@ -110,6 +156,7 @@ const Rotate = styled.div`
 
 const Comment = styled.div`
   font-size: 20px;
+  cursor: pointer;
 `;
 const NewHolder = styled.div`
   display: flex;

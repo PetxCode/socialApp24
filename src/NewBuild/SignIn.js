@@ -31,7 +31,7 @@ const Sign_In = () => {
     await app.auth().signInWithEmailAndPassword(email, password);
 
     reset();
-    navigate.push("/");
+    navigate("/");
   });
 
   const signUpWithPops = async () => {

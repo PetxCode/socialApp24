@@ -5,6 +5,7 @@ import NewHeader from "./NewBuild/NewHeader";
 import Register from "./NewBuild/Register";
 import Sign_In from "./NewBuild/SignIn";
 import PrivateRoute from "./class04/Global/PrivateRoute";
+import MemoryBook from "./MemoryBook/MemoryBook";
 
 const App = () => {
   return (
@@ -17,6 +18,14 @@ const App = () => {
             element={
               <PrivateRoute>
                 <MainScreen />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/memory"
+            element={
+              <PrivateRoute>
+                <MemoryBook />
               </PrivateRoute>
             }
           />

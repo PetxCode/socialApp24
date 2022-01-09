@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { app } from "../base";
 import moment from "moment";
 
-const PersonalDetail = ({ createdBy, createdAt }) => {
+const PersonalDetail = ({ image, name, time, createdBy, createdAt }) => {
   const [myUser, setMyUser] = useState([]);
 
   const getUser = async () => {
@@ -24,10 +24,10 @@ const PersonalDetail = ({ createdBy, createdAt }) => {
 
   return (
     <Container>
-      <Avatar src={myUser?.avatar} />
+      {image ? <Avatar src={myUser?.avatar} /> : null}
       <Holder>
-        <Name>{myUser?.userName}</Name>
-        <Time>{moment(createdAt?.toDate()).fromNow()}</Time>
+        {name ? <Name>{myUser?.userName}</Name> : null}
+        {time ? <Time>{moment(createdAt?.toDate()).fromNow()}</Time> : null}
       </Holder>
     </Container>
   );

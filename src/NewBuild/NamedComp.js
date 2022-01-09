@@ -4,7 +4,7 @@ import { app } from "../base";
 import { AuthContext } from "./AuthProvider";
 import moment from "moment";
 
-const ShowDetails = ({ date, image, name, myID, time }) => {
+const NamedComp = ({ name, likedBy }) => {
   const { currentUser } = useContext(AuthContext);
 
   const [getData, setGetData] = useState([]);
@@ -13,7 +13,7 @@ const ShowDetails = ({ date, image, name, myID, time }) => {
 
   const gettingPost = async () => {
     await getPost
-      .doc(myID)
+      .doc(likedBy)
       .get()
       .then((user) => {
         setGetData(user.data());
@@ -21,46 +21,18 @@ const ShowDetails = ({ date, image, name, myID, time }) => {
   };
   useEffect(() => {
     gettingPost();
-  }, [getData]);
+  }, []);
 
   return (
     <div>
       <Div>
-        {image ? (
-          <div>
-            {getData.avatar === "" ? (
-              <ImageItem>{getData?.userName.charAt(0)}</ImageItem>
-            ) : (
-              <Image src={getData?.avatar} />
-            )}
-          </div>
-        ) : null}
-        <Container>
-          {name ? <Name>{getData?.userName}</Name> : null}
-          {date ? <Time>{moment(time?.toDate()).fromNow()}</Time> : null}
-        </Container>
+        <Container>{name ? <Name>{getData?.userName}</Name> : null}</Container>
       </Div>
     </div>
   );
 };
 
-export default ShowDetails;
-
-const ImageItem = styled.div`
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  border: 1px solid gray;
-  margin-right: 10px;
-  background: orange;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
-`;
+export default NamedComp;
 
 const Time = styled.div``;
 

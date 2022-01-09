@@ -8,8 +8,10 @@ import { app } from "../base";
 import Picker from "emoji-picker-react";
 import firebase from "firebase";
 import LinearProgress from "@mui/material/LinearProgress";
+
 const TopPost = () => {
   const { currentUser } = useContext(AuthContext);
+
   const [chosenEmoji, setChosenEmoji] = useState(null);
   const [percent, setPercent] = useState(0);
   const [userData, setUserData] = useState([]);
@@ -80,7 +82,12 @@ const TopPost = () => {
       <Wrapper>
         <Card>
           <InputTag>
-            <Image src={userData?.avatar} />
+            {userData.avatar === "" ? (
+              <ImageNon>{userData.userName.charAt(0)}</ImageNon>
+            ) : (
+              <Image src={userData?.avatar} />
+            )}
+
             <Input
               placeholder={`What's on your mind, ${userData?.userName}...?`}
               type="text"
@@ -247,6 +254,22 @@ const Input = styled.input`
     font-family: Poppins;
     color: black;
   }
+`;
+
+const ImageNon = styled.div`
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid gray;
+  color: white;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  background: orange;
+  font-size: 20px;
 `;
 
 const Image = styled.img`
